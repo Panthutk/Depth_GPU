@@ -8,7 +8,7 @@ from compareMode import CompareMode
 from detailMode import DetailMode
 
 
-class App:
+class Menu:
     def __init__(self) -> None:
         self.root = Tk()
         self.root.title("Depth Gpu Comparison")

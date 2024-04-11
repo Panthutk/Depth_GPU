@@ -1,5 +1,5 @@
 # use for run the program
 
 if __name__ == "__main__":
-    from menu import App
-    App()
+    from menu import menu
+    menu()
