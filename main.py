@@ -1,11 +1,5 @@
-from tkinter import *
+# use for run the program
 
-
-class App:
-    def __init__(self) -> None:
-        self.root = Tk()
-        self.root.title("Depth Gpu Comparison")
-        self.root.geometry("800x600")
-
-    def run(self):
-        self.root.mainloop()
+if __name__ == "__main__":
+    from menu import App
+    App()
