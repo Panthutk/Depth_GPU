@@ -1,6 +1,11 @@
-from tkinter import *
+import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
+from tkinter import *
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
+from compareMode import CompareMode
+from detailMode import DetailMode
 
 
 class App:
