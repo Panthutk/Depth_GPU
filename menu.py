@@ -16,5 +16,8 @@ class Menu:
 
         self.run()
 
+    def read_csv(self):
+        self.df = pd.read_csv('gpu_specs_v6.csv')
+
     def run(self):
         self.root.mainloop()
