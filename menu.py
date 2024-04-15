@@ -15,6 +15,7 @@ class Menu:
         self.root.geometry("1000x600")
         self.read_csv()
         self.menu_page()
+        self.gpu_menu_histogram()
 
         self.run()
 
@@ -39,6 +40,28 @@ class Menu:
         self.root.rowconfigure(1, weight=1)
         self.root.rowconfigure(2, weight=3)
         self.root.rowconfigure(3, weight=3)
+
+    def gpu_menu_histogram(self):
+
+        self.df['releaseYear'] = self.df['releaseYear'].replace(0, 'Unknown')
+
+        self.release_year_counts = self.df['releaseYear'].value_counts()
+
+        self.release_year_counts = self.release_year_counts[
+            self.release_year_counts.index != 'Unknown']
+
+        self.release_year_counts.index = self.release_year_counts.index.astype(
+            float)
+
+        plt.figure(figsize=(10, 6))
+        self.release_year_counts.sort_index().plot(
+            marker='o', color='orange', linewidth=2)
+        plt.title('Graphics Cards by Release Year')
+        plt.xlabel('Release Year')
+        plt.ylabel('Number of Cards')
+        plt.grid(axis='y', linestyle='--', alpha=0.7)
+        plt.tight_layout()
+        plt.show()
 
     def run(self):
         self.root.mainloop()
