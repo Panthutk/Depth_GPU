@@ -100,6 +100,35 @@ class Menu:
         plt.grid(axis='y', alpha=0.5)
         plt.show()
 
+    def mem_bus_width_distribution(self):
+        mem_bus_width_counts_filtered = self.df[self.df['memBusWidth']
+                                                != 0]['memBusWidth'].value_counts().sort_index()
+
+        # Plotting the horizontal bar plot
+        plt.figure(figsize=(10, 8))
+        mem_bus_width_counts_filtered.plot(kind='barh', color='skyblue')
+        plt.title('Memory Bus Width Distribution')
+        plt.xlabel('Count')
+        plt.ylabel('Memory Bus Width')
+        plt.grid(axis='x', alpha=0.5)
+        plt.tight_layout()
+        plt.show()
+
+    def unified_shader_pie_chart(self):
+        # Filter out zero counts
+        non_zero_counts = self.df[self.df['unifiedShader']
+                                  != 0]['unifiedShader'].value_counts()
+
+        # Select the top five non-zero counts
+        top_five_non_zero_counts = non_zero_counts.head()
+
+        # Plot the pie chart
+        plt.figure(figsize=(8, 6))
+        plt.pie(top_five_non_zero_counts, labels=top_five_non_zero_counts.index,
+                autopct='%1.1f%%', colors=plt.cm.Set2.colors)
+        plt.title('Unified Shader Counts')
+        plt.show()
+
     def load_compare_mode(self):
         # Clear the frames
         for widget in self.left_frame.winfo_children():
