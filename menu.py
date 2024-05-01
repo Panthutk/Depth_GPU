@@ -19,7 +19,7 @@ class Menu:
 
         self.setup_frames()
         self.menu_page()
-        self.gpu_menu_histogram()
+        self.gpu_menu_menu_graph()
 
         self.run()
 
@@ -50,26 +50,55 @@ class Menu:
         Button(self.left_frame, text="Detail Mode",
                command=self.load_detail_mode).pack(fill='x', pady=10)
 
-    def gpu_menu_histogram(self):
-        # Create the GPU menu histogram
-        self.df['releaseYear'] = self.df['releaseYear'].replace(0, 'Unknown')
-        release_year_counts = self.df['releaseYear'].value_counts()
+    def show_gpu_menu_graph(self):
+        pass
+
+    def corelation_coefficient(self):
+        self.df['gpuClock'] = self.df['gpuClock'].replace(0, 'Unknown')
+        self.df['memClock'] = self.df['memClock'].replace(0, 'Unknown')
+
+        # Convert 'gpuClock' and 'memClock' columns to numeric type, ignoring errors
+        self.df['gpuClock'] = pd.to_numeric(
+            self.df['gpuClock'], errors='coerce')
+        self.df['memClock'] = pd.to_numeric(
+            self.df['memClock'], errors='coerce')
+
+        # Filter out 'Unknown' values
+        filtered_df = self.df.dropna(subset=['gpuClock', 'memClock'])
+
+        # Calculate correlation coefficient
+        correlation_coefficient = filtered_df['gpuClock'].corr(
+            filtered_df['memClock'])
+
+        # Plotting scatter plot
+        plt.figure(figsize=(8, 6))
+        plt.scatter(filtered_df['gpuClock'],
+                    filtered_df['memClock'], color='blue', alpha=0.5)
+        plt.title('Scatter Plot: GPU Clock vs Memory Clock')
+        plt.xlabel('GPU Clock')
+        plt.ylabel('Memory Clock')
+        plt.grid(True)
+        plt.show()
+
+        print("Correlation Coefficient between GPU Clock and Memory Clock:",
+              correlation_coefficient)
+
+    def histogram_for_release_year(self):
+        release_year_counts = self.df['releaseYear'].replace(
+            0, 'Unknown').value_counts()
+
+        # Exclude 'Unknown' category
         release_year_counts = release_year_counts[release_year_counts.index != 'Unknown']
-        release_year_counts.index = release_year_counts.index.astype(float)
 
-        # Create the histogram
-        fig, ax = plt.subplots(figsize=(10, 6))
-        release_year_counts.sort_index().plot(
-            ax=ax, marker='o', color='orange', linewidth=2)
-        ax.set_title('Graphics Cards by Release Year')
-        ax.set_xlabel('Release Year')
-        ax.set_ylabel('Number of Cards')
-        ax.grid(axis='y', linestyle='--', alpha=0.7)
-
-        # Display the histogram
-        canvas = FigureCanvasTkAgg(fig, master=self.right_frame)
-        canvas.draw()
-        canvas.get_tk_widget().pack(fill=BOTH, expand=True)
+        # Plotting histogram for Release Year
+        plt.figure(figsize=(8, 6))
+        plt.hist(release_year_counts.index.astype(int), bins=10,
+                 weights=release_year_counts.values, color='skyblue', edgecolor='black')
+        plt.title('Distribution of Release Year')
+        plt.xlabel('Release Year')
+        plt.ylabel('Frequency')
+        plt.grid(axis='y', alpha=0.5)
+        plt.show()
 
     def load_compare_mode(self):
         # Clear the frames
