@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 from tkinter import *
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
-
 from compareMode import CompareMode
 from detailMode import DetailMode
 
@@ -19,7 +18,7 @@ class Menu:
 
         self.setup_frames()
         self.menu_page()
-        self.gpu_menu_menu_graph()
+        self.show_gpu_menu_graph()
 
         self.run()
 
@@ -51,9 +50,20 @@ class Menu:
                command=self.load_detail_mode).pack(fill='x', pady=10)
 
     def show_gpu_menu_graph(self):
-        pass
+        fig, axs = plt.subplots(2, 2, figsize=(10, 8))
 
-    def corelation_coefficient(self):
+        self.corelation_coefficient(axs[0, 0])
+        self.histogram_for_release_year(axs[0, 1])
+        self.mem_bus_width_distribution(axs[1, 0])
+        self.unified_shader_pie_chart(axs[1, 1])
+
+        fig.tight_layout()  # Adjust layout of the entire figure
+
+        canvas = FigureCanvasTkAgg(fig, master=self.right_frame)
+        canvas.draw()
+        canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=True)
+
+    def corelation_coefficient(self, ax):
         self.df['gpuClock'] = self.df['gpuClock'].replace(0, 'Unknown')
         self.df['memClock'] = self.df['memClock'].replace(0, 'Unknown')
 
@@ -71,19 +81,17 @@ class Menu:
             filtered_df['memClock'])
 
         # Plotting scatter plot
-        plt.figure(figsize=(8, 6))
-        plt.scatter(filtered_df['gpuClock'],
-                    filtered_df['memClock'], color='blue', alpha=0.5)
-        plt.title('Scatter Plot: GPU Clock vs Memory Clock')
-        plt.xlabel('GPU Clock')
-        plt.ylabel('Memory Clock')
-        plt.grid(True)
-        plt.show()
+        ax.scatter(filtered_df['gpuClock'],
+                   filtered_df['memClock'], color='blue', alpha=0.5)
+        ax.set_title('Scatter Plot: GPU Clock vs Memory Clock')
+        ax.set_xlabel('GPU Clock')
+        ax.set_ylabel('Memory Clock')
+        ax.grid(True)
 
         print("Correlation Coefficient between GPU Clock and Memory Clock:",
               correlation_coefficient)
 
-    def histogram_for_release_year(self):
+    def histogram_for_release_year(self, ax):
         release_year_counts = self.df['releaseYear'].replace(
             0, 'Unknown').value_counts()
 
@@ -91,30 +99,25 @@ class Menu:
         release_year_counts = release_year_counts[release_year_counts.index != 'Unknown']
 
         # Plotting histogram for Release Year
-        plt.figure(figsize=(8, 6))
-        plt.hist(release_year_counts.index.astype(int), bins=10,
-                 weights=release_year_counts.values, color='skyblue', edgecolor='black')
-        plt.title('Distribution of Release Year')
-        plt.xlabel('Release Year')
-        plt.ylabel('Frequency')
-        plt.grid(axis='y', alpha=0.5)
-        plt.show()
+        ax.hist(release_year_counts.index.astype(int), bins=10,
+                weights=release_year_counts.values, color='skyblue', edgecolor='black')
+        ax.set_title('Distribution of Release Year')
+        ax.set_xlabel('Release Year')
+        ax.set_ylabel('Frequency')
+        ax.grid(axis='y', alpha=0.5)
 
-    def mem_bus_width_distribution(self):
+    def mem_bus_width_distribution(self, ax):
         mem_bus_width_counts_filtered = self.df[self.df['memBusWidth']
                                                 != 0]['memBusWidth'].value_counts().sort_index()
 
         # Plotting the horizontal bar plot
-        plt.figure(figsize=(10, 8))
-        mem_bus_width_counts_filtered.plot(kind='barh', color='skyblue')
-        plt.title('Memory Bus Width Distribution')
-        plt.xlabel('Count')
-        plt.ylabel('Memory Bus Width')
-        plt.grid(axis='x', alpha=0.5)
-        plt.tight_layout()
-        plt.show()
+        mem_bus_width_counts_filtered.plot(kind='barh', color='skyblue', ax=ax)
+        ax.set_title('Memory Bus Width Distribution')
+        ax.set_xlabel('Count')
+        ax.set_ylabel('Memory Bus Width')
+        ax.grid(axis='x', alpha=0.5)
 
-    def unified_shader_pie_chart(self):
+    def unified_shader_pie_chart(self, ax):
         # Filter out zero counts
         non_zero_counts = self.df[self.df['unifiedShader']
                                   != 0]['unifiedShader'].value_counts()
@@ -123,11 +126,9 @@ class Menu:
         top_five_non_zero_counts = non_zero_counts.head()
 
         # Plot the pie chart
-        plt.figure(figsize=(8, 6))
-        plt.pie(top_five_non_zero_counts, labels=top_five_non_zero_counts.index,
-                autopct='%1.1f%%', colors=plt.cm.Set2.colors)
-        plt.title('Unified Shader Counts')
-        plt.show()
+        ax.pie(top_five_non_zero_counts, labels=top_five_non_zero_counts.index,
+               autopct='%1.1f%%', colors=plt.cm.Set2.colors)
+        ax.set_title('Unified Shader Counts')
 
     def load_compare_mode(self):
         # Clear the frames
@@ -154,3 +155,8 @@ class Menu:
     def run(self):
         # Run the main loop
         self.root.mainloop()
+
+
+# Instantiate the Menu class to run the application
+if __name__ == "__main__":
+    menu = Menu()
