@@ -132,24 +132,20 @@ class Menu:
 
     def load_compare_mode(self):
         # Clear the frames
-        for widget in self.left_frame.winfo_children():
-            widget.destroy()
-        for widget in self.right_frame.winfo_children():
+        for widget in self.root.winfo_children():
             widget.destroy()
 
         # Load the compare mode
-        compare_mode = CompareMode(self.df)
+        compare_mode = CompareMode(self.root, self.df)
         compare_mode.run()
 
     def load_detail_mode(self):
         # Clear the frames
-        for widget in self.left_frame.winfo_children():
-            widget.destroy()
-        for widget in self.right_frame.winfo_children():
+        for widget in self.root.winfo_children():
             widget.destroy()
 
         # Load the detail mode
-        detail_mode = DetailMode(self.df)
+        detail_mode = DetailMode(self.root, self.df)
         detail_mode.run()
 
     def run(self):
