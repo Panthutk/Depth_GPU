@@ -48,6 +48,8 @@ class Menu:
                command=self.load_compare_mode).pack(fill='x', pady=10)
         Button(self.left_frame, text="Detail Mode",
                command=self.load_detail_mode).pack(fill='x', pady=10)
+        Button(self.left_frame, text="Quit",
+               command=self.root.quit).pack(fill='x', pady=10)
 
     def show_gpu_menu_graph(self):
         fig, axs = plt.subplots(2, 2, figsize=(10, 8))

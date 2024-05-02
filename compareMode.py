@@ -10,8 +10,3 @@ class CompareMode:
         self.master = master
         self.df = df
         self.master.title("Compare Mode")
-
-        self.run()
-
-    def run(self):
-        self.master.mainloop()

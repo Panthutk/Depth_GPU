@@ -10,8 +10,4 @@ class DetailMode:
         self.master = master
         self.df = df
         self.master.title("Detail Mode")
-
-        self.run()
-
-    def run(self):
-        self.master.mainloop()
+        self.master.geometry("1200x600")
