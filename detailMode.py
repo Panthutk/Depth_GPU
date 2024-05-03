@@ -48,7 +48,7 @@ class DetailMode:
         self.manufacturer_label.pack(side=LEFT, padx=10)
 
         self.manufacturer_combobox = ttk.Combobox(
-            self.head_frame, values=self.df['manufacturer'].unique(), font=("Arial", 12))
+            self.head_frame, values=[str(val).strip() for val in self.df['manufacturer'].unique()], font=("Arial", 12), state='readonly')
         self.manufacturer_combobox.pack(side=LEFT)
 
     def load_menu_page(self):
