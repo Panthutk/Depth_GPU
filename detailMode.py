@@ -51,7 +51,29 @@ class DetailMode:
             self.head_frame, values=[str(val).strip() for val in self.df['manufacturer'].unique()], font=("Arial", 12), state='readonly')
         self.manufacturer_combobox.pack(side=LEFT)
 
-        # Create the ComboBox for GPU that sorts from the manufacturer selected
+        # Create the ComboBox for GPU names
+        self.gpu_label = Label(
+            self.head_frame, text="GPU:", font=("Arial", 12), bg='#989898')
+        self.gpu_label.pack(side=LEFT, padx=10)
+
+        self.gpu_combobox = ttk.Combobox(
+            self.head_frame, font=("Arial", 12), state='readonly')
+        self.gpu_combobox.pack(side=LEFT)
+
+        # Bind manufacturer selection to event handler
+        self.manufacturer_combobox.bind(
+            "<<ComboboxSelected>>", self.update_gpu_combobox)
+
+    def update_gpu_combobox(self, event):
+        # Get the selected manufacturer
+        selected_manufacturer = self.manufacturer_combobox.get()
+
+        # Filter DataFrame based on selected manufacturer
+        gpu_names = self.df[self.df['manufacturer'] ==
+                            selected_manufacturer]['productName'].tolist()
+
+        # Update GPU ComboBox with sorted names
+        self.gpu_combobox['values'] = sorted(gpu_names)
 
     def load_menu_page(self):
         # Destroy the current frame and load the menu page
