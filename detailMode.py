@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from tkinter import *
+from tkinter import ttk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 
@@ -40,6 +41,24 @@ class DetailMode:
         self.home = Button(self.head_frame, text="Menu", font=(
             "Arial", 12), bg='#989898', command=self.load_menu_page, width=10, height=2)
         self.home.pack(side=LEFT, padx=20, pady=18)
+
+        # Create the ComboBox for manufacturer
+        self.manufacturer_label = Label(
+            self.head_frame, text="Manufacturer:", font=("Arial", 12), bg='#989898')
+        self.manufacturer_label.pack(side=LEFT, padx=10)
+
+        self.manufacturer_combobox = ttk.Combobox(
+            self.head_frame, values=self.df['manufacturer'].unique(), font=("Arial", 12))
+        self.manufacturer_combobox.pack(side=LEFT)
+
+    def load_menu_page(self):
+        # Destroy the current frame and load the menu page
+        self.master.destroy()
+        from menu import Menu
+        Menu()
+
+    def run(self):
+        self.master.mainloop()
 
     def load_menu_page(self):
         # Destroy the current frame and load the menu page
