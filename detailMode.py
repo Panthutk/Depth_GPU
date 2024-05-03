@@ -11,18 +11,21 @@ class DetailMode:
         self.df = df
         self.master.title("Detail Mode")
         self.master.geometry("1300x800")
-        self.setup_frames()
+        self.setup_head()
+        self.setup_head_frame()
 
-    def setup_frames(self):
+        self.run()
+
+    def setup_head(self):
         # Create head frame at the top
         self.head_frame = Frame(self.master, height=90, bg='#989898')
         self.head_frame.pack(fill=X)
 
+    def show_gpu_info_and_graph(self):
         # Create a frame container for the lower part
         self.lower_frame = Frame(self.master)
         self.lower_frame.pack(fill=BOTH, expand=True)
 
-    def show_gpu_info_and_graph(self):
         # Create left frame below head frame
         self.left_frame = Frame(
             self.lower_frame, width=410, height=710, bg='#F3F2F2')
@@ -31,3 +34,27 @@ class DetailMode:
         # Create right frame which takes the rest of the space
         self.right_frame = Frame(self.lower_frame, bg='white')
         self.right_frame.pack(side=LEFT, fill=BOTH, expand=True)
+
+    def setup_head_frame(self):
+        # Create the label for the head frame
+        self.home = Button(self.head_frame, text="Home", font=(
+            "Arial", 12), bg='#989898', command=self.load_menu_page)
+        self.home.pack(side=LEFT, padx=20)
+
+    def load_menu_page(self):
+        # Destroy the current frame and load the menu page
+        self.master.destroy()
+        from menu import Menu
+        Menu()
+
+    def run(self):
+        self.master.mainloop()
+
+
+if __name__ == "__main__":
+    # Run the program
+    if __name__ == "__main__":
+        root = Tk()
+        df = pd.DataFrame()
+        detail_mode = DetailMode(root, df)
+        root.mainloop()
