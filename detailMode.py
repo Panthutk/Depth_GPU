@@ -51,14 +51,7 @@ class DetailMode:
             self.head_frame, values=[str(val).strip() for val in self.df['manufacturer'].unique()], font=("Arial", 12), state='readonly')
         self.manufacturer_combobox.pack(side=LEFT)
 
-    def load_menu_page(self):
-        # Destroy the current frame and load the menu page
-        self.master.destroy()
-        from menu import Menu
-        Menu()
-
-    def run(self):
-        self.master.mainloop()
+        # Create the ComboBox for GPU that sorts from the manufacturer selected
 
     def load_menu_page(self):
         # Destroy the current frame and load the menu page
