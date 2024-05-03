@@ -37,9 +37,9 @@ class DetailMode:
 
     def setup_head_frame(self):
         # Create the label for the head frame
-        self.home = Button(self.head_frame, text="Home", font=(
-            "Arial", 12), bg='#989898', command=self.load_menu_page)
-        self.home.pack(side=LEFT, padx=20)
+        self.home = Button(self.head_frame, text="Menu", font=(
+            "Arial", 12), bg='#989898', command=self.load_menu_page, width=10, height=2)
+        self.home.pack(side=LEFT, padx=20, pady=18)
 
     def load_menu_page(self):
         # Destroy the current frame and load the menu page
@@ -49,12 +49,3 @@ class DetailMode:
 
     def run(self):
         self.master.mainloop()
-
-
-if __name__ == "__main__":
-    # Run the program
-    if __name__ == "__main__":
-        root = Tk()
-        df = pd.DataFrame()
-        detail_mode = DetailMode(root, df)
-        root.mainloop()
