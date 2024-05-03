@@ -10,3 +10,4 @@ class CompareMode:
         self.master = master
         self.df = df
         self.master.title("Compare Mode")
+        self.master.geometry("1300x800")
