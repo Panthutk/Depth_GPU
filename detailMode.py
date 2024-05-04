@@ -125,8 +125,8 @@ class DetailMode:
 
         # Display additional details in the left frame
         additional_label = Label(self.left_frame, text=additional_details,
-                                 font=("Arial", 12), justify=LEFT)
-        additional_label.pack()
+                                 font=("Arial", 12), justify=LEFT, anchor='w')
+        additional_label.pack(anchor='w')
 
         # Retrieve numeric details for the selected GPU
         numeric_details = gpu_details.drop(
@@ -152,8 +152,8 @@ class DetailMode:
 
         # Display GPU details in the left frame
         detail_label = Label(self.left_frame, text=detail_text,
-                             font=("Arial", 12), justify=LEFT)
-        detail_label.pack()
+                             font=("Arial", 12), justify=LEFT, anchor='w')
+        detail_label.pack(anchor='w')
 
         # Plotting in the right frame
         attributes = ["memBusWidth", "gpuClock",
