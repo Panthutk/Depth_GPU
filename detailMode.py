@@ -93,7 +93,7 @@ class DetailMode:
         selected_manufacturer = self.manufacturer_combobox.get()
         selected_gpu = self.gpu_combobox.get()
 
-        # colors for the bar chart
+        # Define colors for the bar plot
         colors = {'NVIDIA': 'b',
                   'AMD': 'g',
                   'Intel': 'y',
@@ -112,14 +112,43 @@ class DetailMode:
         numeric_details = gpu_details.drop(
             columns=["productName", "manufacturer", "igp", "bus", "memType", "gpuChip"]).iloc[0]
 
+        # Retrieve additional details
+        additional_details = f"ProductName: {selected_gpu}\n" \
+            f"Manufacturer: {selected_manufacturer}\n" \
+            f"MemSize: {gpu_details['memSize'].iloc[0]}\n" \
+            f"Release year: {gpu_details['releaseYear'].iloc[0]}\n" \
+            f"IGP: {gpu_details['igp'].iloc[0]}\n" \
+            f"Bus: {gpu_details['bus'].iloc[0]}\n" \
+            f"Mem type: {gpu_details['memType'].iloc[0]}\n" \
+            f"GPU Chip: {gpu_details['gpuChip'].iloc[0]}\n" \
+            "---------------------------------------\n"
+
+        # Display additional details in the left frame
+        additional_label = Label(self.left_frame, text=additional_details,
+                                 font=("Arial", 12), justify=LEFT)
+        additional_label.pack()
+
+        # Retrieve numeric details for the selected GPU
+        numeric_details = gpu_details.drop(
+            columns=["productName", "manufacturer", "igp", "bus", "memType", "gpuChip"]).iloc[0]
+
         # Retrieve average values
         avg_values = self.df.drop(
             columns=["productName", "manufacturer", "igp", "bus", "memType", "gpuChip"]).mean()
 
         # Prepare the text to display in the left frame
-        detail_text = ""
+        detail_text = "Short Summary\n"
         for attribute, value in numeric_details.items():
-            detail_text += f"{attribute}: {value}\n"
+            if attribute == "memBusWidth":
+                detail_text += f"{attribute}: {value} is below average.\n"
+            else:
+                detail_text += f"{attribute}: {value} is above average.\n"
+        detail_text += "---------------------------------------\n"
+
+        detail_text += "Summary statistics\n"
+        for attribute in ["memBusWidth", "gpuClock", "memClock", "unifiedShader", "tmu", "rop"]:
+            detail_text += f"   {attribute}: mean={avg_values[attribute]:.2f}, std={self.df[attribute].std():.2f}, " \
+                f"min={self.df[attribute].min():.2f}, max={self.df[attribute].max():.2f}\n"
 
         # Display GPU details in the left frame
         detail_label = Label(self.left_frame, text=detail_text,
