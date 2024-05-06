@@ -146,9 +146,16 @@ class DetailMode:
         detail_text += "---------------------------------------\n"
 
         detail_text += "Summary statistics\n"
-        for attribute in ["memBusWidth", "gpuClock", "memClock", "unifiedShader", "tmu", "rop"]:
-            detail_text += f"   {attribute}: mean={avg_values[attribute]:.2f}, std={self.df[attribute].std():.2f}, " \
-                f"min={self.df[attribute].min():.2f}, max={self.df[attribute].max():.2f}\n"
+        detail_text += "    memBusWidth gpuClock MemClock\n"
+        detail_text += f"min:   {self.df['memBusWidth'].min():.2f}          {self.df['gpuClock'].min():.2f}         {self.df['memClock'].min():.2f} \n"
+        detail_text += f"max:  {self.df['memBusWidth'].max():.2f}   {self.df['gpuClock'].max():.2f}    {self.df['memClock'].max():.2f} \n"
+        detail_text += f"mean: {self.df['memBusWidth'].mean():.2f}    {self.df['gpuClock'].mean():.2f}    {self.df['memClock'].mean():.2f} \n"
+        detail_text += f"std:    {self.df['memBusWidth'].std():.2f}     {self.df['gpuClock'].std():.2f}     {self.df['memClock'].std():.2f} \n"
+        detail_text += "    unifiedShader   tmu      rop\n"
+        detail_text += f"min:   {self.df['unifiedShader'].min():.2f}          {self.df['tmu'].min():.2f}         {self.df['rop'].min():.2f} \n"
+        detail_text += f"max:  {self.df['unifiedShader'].max():.2f}   {self.df['tmu'].max():.2f}    {self.df['rop'].max():.2f} \n"
+        detail_text += f"mean: {self.df['unifiedShader'].mean():.2f}    {self.df['tmu'].mean():.2f}    {self.df['rop'].mean():.2f} \n"
+        detail_text += f"std:    {self.df['unifiedShader'].std():.2f}     {self.df['tmu'].std():.2f}     {self.df['rop'].std():.2f} \n"
 
         # Display GPU details in the left frame
         detail_label = Label(self.left_frame, text=detail_text,
