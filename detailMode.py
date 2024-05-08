@@ -146,17 +146,19 @@ class DetailMode:
         detail_text += "---------------------------------------\n"
 
         detail_text += "Summary statistics\n"
-        detail_text += "    memBusWidth gpuClock MemClock\n"
-        detail_text += f"min:   {self.df['memBusWidth'].min():.2f}          {self.df['gpuClock'].min():.2f}         {self.df['memClock'].min():.2f} \n"
-        detail_text += f"max:  {self.df['memBusWidth'].max():.2f}   {self.df['gpuClock'].max():.2f}    {self.df['memClock'].max():.2f} \n"
-        detail_text += f"mean: {self.df['memBusWidth'].mean():.2f}    {self.df['gpuClock'].mean():.2f}    {self.df['memClock'].mean():.2f} \n"
-        detail_text += f"std:    {self.df['memBusWidth'].std():.2f}     {self.df['gpuClock'].std():.2f}     {self.df['memClock'].std():.2f} \n"
-        detail_text += "    unifiedShader   tmu      rop\n"
-        detail_text += f"min:   {self.df['unifiedShader'].min():.2f}          {self.df['tmu'].min():.2f}         {self.df['rop'].min():.2f} \n"
-        detail_text += f"max:  {self.df['unifiedShader'].max():.2f}   {self.df['tmu'].max():.2f}    {self.df['rop'].max():.2f} \n"
-        detail_text += f"mean: {self.df['unifiedShader'].mean():.2f}    {self.df['tmu'].mean():.2f}    {self.df['rop'].mean():.2f} \n"
-        detail_text += f"std:    {self.df['unifiedShader'].std():.2f}     {self.df['tmu'].std():.2f}     {self.df['rop'].std():.2f} \n"
+        important_specs = ['memBusWidth', 'gpuClock',
+                           'memClock']
+        important_specs2 = ['unifiedShader', 'tmu', 'rop']
+        filtered_important_specs = self.df[self.df[important_specs] != 0]
+        filtered_important_specs2 = self.df[self.df[important_specs2] != 0]
 
+        stats = filtered_important_specs[important_specs].agg(
+            ['mean', 'std', 'min', 'max'])
+        stats2 = filtered_important_specs2[important_specs2].agg(
+            ['mean', 'std', 'min', 'max'])
+
+        detail_text += f"{stats.round(2)}\n"
+        detail_text += f"{stats2.round(2)}\n"
         # Display GPU details in the left frame
         detail_label = Label(self.left_frame, text=detail_text,
                              font=("Arial", 12), justify=LEFT, anchor='w')

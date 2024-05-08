@@ -14,6 +14,7 @@ class CompareMode:
         self.master.geometry("1300x800")
         self.setup_head()
         self.setup_lower_frame()
+        self.setup_head_frame()
 
         self.run()
 
@@ -36,28 +37,50 @@ class CompareMode:
         self.right_frame = Frame(self.lower_frame, bg='white')
         self.right_frame.pack(side=LEFT, fill=BOTH, expand=True)
 
-        def setup_head_frame(self):
-            # Create the label for the head frame
-            self.home = Button(self.head_frame, text="Menu", font=(
-                "Arial", 12), bg='#989898', command=self.load_menu_page, width=10, height=2)
-            self.home.pack(side=LEFT, padx=20, pady=18)
+    def setup_head_frame(self):
+        # Create the label for the head frame
+        self.home = Button(self.head_frame, text="Menu", font=(
+            "Arial", 12), bg='#989898', command=self.load_menu_page, width=10, height=2)
+        self.home.pack(side=LEFT, padx=20, pady=18)
 
-            # Create the ComboBox for manufacturer
-            self.first_manufacturer_label = Label(
-                self.head_frame, text="Manufacturer:", font=("Arial", 12), bg='#989898')
-            self.first_manufacturer_label.pack(side=LEFT, padx=10)
+        # Create the ComboBox for First manufacturer
+        self.first_manufacturer_label = Label(
+            self.head_frame, text="Manufacturer:", font=("Arial", 12), bg='#989898')
+        self.first_manufacturer_label.pack(side=LEFT, padx=10)
 
-            self.first_manufacturer_combobox = ttk.Combobox(
-                self.first_head_frame, values=[str(val).strip() for val in self.df['manufacturer'].unique()], font=("Arial", 12), state='readonly')
-            self.first_manufacturer_combobox.pack(side=LEFT)
+        self.first_manufacturer_combobox = ttk.Combobox(
+            self.head_frame, values=[str(val).strip() for val in self.df['manufacturer'].unique()], font=("Arial", 12), state='readonly')
+        self.first_manufacturer_combobox.pack(side=LEFT)
 
-            self.second_manufacturer_label = Label(
-                self.head_frame, text="Manufacturer:", font=("Arial", 12), bg='#989898')
-            self.second_manufacturer_label.pack(side=LEFT, padx=10)
+        # Create the ComboBox for First GPU names
+        self.first_gpu_label = Label(
+            self.head_frame, text="GPU:", font=("Arial", 12), bg='#989898')
+        self.first_gpu_label.pack(side=LEFT, padx=10)
 
-            self.second_manufacturer_combobox = ttk.Combobox(
-                self.head_frame, values=[str(val).strip() for val in self.df['manufacturer'].unique()], font=("Arial", 12), state='readonly')
-            self.second_manufacturer_combobox.pack(side=LEFT)
+        self.first_gpu_combobox = ttk.Combobox(
+            self.head_frame, font=("Arial", 12), state='readonly')
+        self.first_gpu_combobox.pack(side=LEFT)
+
+        # Bind first manufacturer combobox to update the first GPU combobox
+        self.first_manufacturer_combobox.bind(
+            "<<ComboboxSelected>>", self.update_first_gpu_combobox)
+
+    def update_first_gpu_combobox(self, event):
+        # Get the selected manufacturer
+        first_selected_manufacturer = self.first_manufacturer_combobox.get()
+
+        # Filter DataFrame based on selected manufacturer
+        first_gpu_names = self.df[self.df['manufacturer'] ==
+                                  first_selected_manufacturer]['productName'].tolist()
+
+        # Update the first GPU combobox
+        self.first_gpu_combobox['values'] = sorted(first_gpu_names)
+
+    def load_menu_page(self):
+        # Load the menu page
+        self.master.destroy()
+        from menu import Menu
+        Menu()
 
     def run(self):
         self.master.mainloop()
