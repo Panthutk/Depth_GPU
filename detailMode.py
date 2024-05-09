@@ -108,10 +108,6 @@ class DetailMode:
         gpu_details = self.df[(self.df['manufacturer'] == selected_manufacturer) & (
             self.df['productName'] == selected_gpu)]
 
-        # Retrieve numeric details for the selected GPU
-        numeric_details = gpu_details.drop(
-            columns=["productName", "manufacturer", "igp", "bus", "memType", "gpuChip"]).iloc[0]
-
         # Retrieve additional details
         additional_details = f"ProductName: {selected_gpu}\n" \
             f"Manufacturer: {selected_manufacturer}\n" \
