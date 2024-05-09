@@ -12,6 +12,7 @@ class CompareMode:
         self.df = df
         self.master.title("Compare Mode")
         self.master.geometry("1500x800")
+        self.quit_program()
         self.setup_head()
         self.setup_lower_frame()
         self.setup_head_frame()
@@ -200,6 +201,10 @@ class CompareMode:
         self.master.destroy()
         from menu import Menu
         Menu()
+
+    def quit_program(self):
+        # Quit the program
+        self.master.protocol("WM_DELETE_WINDOW", self.master.quit)
 
     def run(self):
         self.master.mainloop()

@@ -12,6 +12,7 @@ class DetailMode:
         self.df = df
         self.master.title("Detail Mode")
         self.master.geometry("1300x800")
+        self.quit_program()
         self.setup_head()
         self.setup_head_frame()
         self.setup_lower_frame()
@@ -193,6 +194,9 @@ class DetailMode:
         self.master.destroy()
         from menu import Menu
         Menu()
+
+    def quit_program(self):
+        self.master.protocol("WM_DELETE_WINDOW", self.master.quit)
 
     def run(self):
         self.master.mainloop()

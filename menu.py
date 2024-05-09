@@ -15,6 +15,7 @@ class Menu:
         self.root.title("Depth GPU Comparison")
         self.root.geometry("1200x600")
         self.read_csv()
+        self.root.protocol("WM_DELETE_WINDOW", self.quit_program)
 
         self.setup_frames()
         self.menu_page()
@@ -90,9 +91,6 @@ class Menu:
         ax.set_ylabel('Memory Clock')
         ax.grid(True)
 
-        print("Correlation Coefficient between GPU Clock and Memory Clock:",
-              correlation_coefficient)
-
     def histogram_for_release_year(self, ax):
         release_year_counts = self.df['releaseYear'].replace(
             0, 'Unknown').value_counts()
@@ -149,6 +147,10 @@ class Menu:
         # Load the detail mode
         detail_mode = DetailMode(self.root, self.df)
         detail_mode.run()
+
+    def quit_program(self):
+        # Quit the program
+        self.root.quit()
 
     def run(self):
         # Run the main loop
