@@ -11,7 +11,7 @@ class CompareMode:
         self.master = master
         self.df = df
         self.master.title("Compare Mode")
-        self.master.geometry("1300x800")
+        self.master.geometry("1500x800")
         self.setup_head()
         self.setup_lower_frame()
         self.setup_head_frame()
@@ -65,6 +65,32 @@ class CompareMode:
         self.first_manufacturer_combobox.bind(
             "<<ComboboxSelected>>", self.update_first_gpu_combobox)
 
+        # Create the ComboBox for Second manufacturer
+        self.second_manufacture_label = Label(
+            self.head_frame, text="Manufacturer:", font=("Arial", 12), bg='#989898')
+        self.second_manufacture_label.pack(side=LEFT, padx=10)
+
+        self.second_manufacture_combobox = ttk.Combobox(
+            self.head_frame, values=[str(val).strip() for val in self.df['manufacturer'].unique()], font=("Arial", 12), state='readonly')
+        self.second_manufacture_combobox.pack(side=LEFT)
+
+        # Create the ComboBox for Second GPU names
+        self.second_gpu_label = Label(
+            self.head_frame, text="GPU:", font=("Arial", 12), bg='#989898')
+        self.second_gpu_label.pack(side=LEFT, padx=10)
+
+        self.second_gpu_combobox = ttk.Combobox(
+            self.head_frame, font=("Arial", 12), state='readonly')
+        self.second_gpu_combobox.pack(side=LEFT)
+
+        # Bind second manufacturer combobox to update the second GPU combobox
+        self.second_manufacture_combobox.bind(
+            "<<ComboboxSelected>>", self.update_second_gpu_combobox)
+
+        self.compare_button = Button(self.head_frame, text="Compare", font=(
+            "Arial", 12), bg='#989898', command=self.compare_gpu, width=10, height=2)
+        self.compare_button.pack(side=RIGHT, padx=20, pady=18)
+
     def update_first_gpu_combobox(self, event):
         # Get the selected manufacturer
         first_selected_manufacturer = self.first_manufacturer_combobox.get()
@@ -75,6 +101,20 @@ class CompareMode:
 
         # Update the first GPU combobox
         self.first_gpu_combobox['values'] = sorted(first_gpu_names)
+
+    def update_second_gpu_combobox(self, event):
+        # Get the selected manufacturer
+        second_selected_manufacturer = self.second_manufacture_combobox.get()
+
+        # Filter DataFrame based on selected manufacturer
+        second_gpu_names = self.df[self.df['manufacturer'] ==
+                                   second_selected_manufacturer]['productName'].tolist()
+
+        # Update the second GPU combobox
+        self.second_gpu_combobox['values'] = sorted(second_gpu_names)
+
+    def compare_gpu(self):
+        pass
 
     def load_menu_page(self):
         # Load the menu page
