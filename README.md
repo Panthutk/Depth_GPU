@@ -28,6 +28,13 @@ This is compare mode it activates after trigger from event button in menu.py it 
 ### Description
 this mode will allow user to find it details about their GPU and show them the important data with short summary and statistics to let our user understand their GPU performance and component.
 
+## UML Class diagram
+![classDiagram](src/umlDGC.drawio.png)
+
+## Uml Sequence diagram
+Sequence Diagram for detailMode
+![SequenceDiagram](src/SequenceDiagramdetailMode.drawio.png)
+
 ## DataSource
 * Origin data from : 🟩NVIDIA & AMD🟥 GPUs Full Specs💠 [Kaggle.com](https://www.kaggle.com/datasets/alanjo/graphics-card-full-specs)
 * This code under MIT license : [LICENSE](https://github.com/Panthutk/Depth_GPU/blob/master/LICENSE)
