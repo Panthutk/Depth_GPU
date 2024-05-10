@@ -196,6 +196,49 @@ class CompareMode:
                              font=("Arial", 12), justify=LEFT, anchor='w')
         detail_label.pack(anchor='w')
 
+        # Plot compare bar in the right frame
+        self.plot_comparison(first_gpu_details, second_gpu_details)
+
+    def plot_comparison(self, first_gpu_details, second_gpu_details):
+        # Bar plot for comparison
+        fig, ax = plt.subplots(figsize=(8, 6))
+
+        # Values for bars
+        labels = ['memBusWidth', 'gpuClock', 'memClock']
+        first_values = first_gpu_details[labels].values[0]
+        second_values = second_gpu_details[labels].values[0]
+
+        x = np.arange(len(labels))
+        width = 0.35
+
+        rects1 = ax.bar(x - width/2, first_values, width, label='First GPU')
+        rects2 = ax.bar(x + width/2, second_values, width, label='Second GPU')
+
+        ax.set_ylabel('Values')
+        ax.set_title('Comparison of GPUs')
+        ax.set_xticks(x)
+        ax.set_xticklabels(labels)
+        ax.legend()
+
+        # Attach a text label above each bar in *rects*, displaying its height.
+        self.autolabel(rects1, ax)
+        self.autolabel(rects2, ax)
+
+        # Display the plot in the right frame
+        canvas = FigureCanvasTkAgg(fig, master=self.right_frame)
+        canvas.draw()
+        canvas.get_tk_widget().pack(fill=BOTH, expand=True)
+
+    def autolabel(self, rects, ax):
+        """Attach a text label above each bar in *rects*, displaying its height."""
+        for rect in rects:
+            height = rect.get_height()
+            ax.annotate('{}'.format(height),
+                        xy=(rect.get_x() + rect.get_width() / 2, height),
+                        xytext=(0, 3),  # 3 points vertical offset
+                        textcoords="offset points",
+                        ha='center', va='bottom')
+
     def load_menu_page(self):
         # Load the menu page
         self.master.destroy()

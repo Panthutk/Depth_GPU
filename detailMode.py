@@ -170,8 +170,8 @@ class DetailMode:
         br2 = [x + 0.4 for x in br1]
 
         fig, ax = plt.subplots()
-        ax.bar(br1, card_values, color=colors[selected_manufacturer],
-               width=0.4, edgecolor='grey', label=selected_gpu)
+        bars = ax.bar(br1, card_values, color=colors[selected_manufacturer],
+                      width=0.4, edgecolor='grey', label=selected_gpu)
         ax.bar(br2, avg_values[attributes], color='#D6ECBD',
                width=0.4, edgecolor='grey', label='Average')
 
@@ -189,6 +189,26 @@ class DetailMode:
         canvas.draw()
         canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=1)
 
+        # Add labels to the bars
+        self.autolabel(ax, card_values, bars, avg_values)
+
+    def autolabel(self, ax, card_values, rects, avg_values):
+        """Attach a text label above each bar in *rects*, displaying its height and the average value."""
+        for rect, value, avg_value in zip(rects, card_values, avg_values):
+            height = rect.get_height()
+            ax.annotate('{:.2f}'.format(height),
+                        xy=(rect.get_x() + rect.get_width() / 2, height),
+                        xytext=(0, 3),  # 3 points vertical offset
+                        textcoords="offset points",
+                        ha='center', va='bottom')
+
+            ax.annotate('Avg: {:.2f}'.format(avg_value),
+                        xy=(rect.get_x() + rect.get_width() / 2, height),
+                        # 17 points vertical offset from height
+                        xytext=(0, 17),
+                        textcoords="offset points",
+                        ha='center', va='bottom')
+
     def load_menu_page(self):
         # Destroy the current frame and load the menu page
         self.master.destroy()
@@ -196,7 +216,9 @@ class DetailMode:
         Menu()
 
     def quit_program(self):
+        # Quit the program when the window is closed
         self.master.protocol("WM_DELETE_WINDOW", self.master.quit)
 
     def run(self):
+        # Run the main loop
         self.master.mainloop()
