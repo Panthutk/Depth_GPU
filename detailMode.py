@@ -12,7 +12,7 @@ class DetailMode:
         self.df = df
         self.master.title("Detail Mode")
         self.master.geometry("1300x800")
-        self.quit_program()
+        self.master.protocol("WM_DELETE_WINDOW", self.quit_program)
         self.setup_head()
         self.setup_head_frame()
         self.setup_lower_frame()

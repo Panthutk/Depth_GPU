@@ -12,7 +12,8 @@ class CompareMode:
         self.df = df
         self.master.title("Compare Mode")
         self.master.geometry("1500x800")
-        self.quit_program()
+        self.master.protocol("WM_DELETE_WINDOW", self.quit_program)
+
         self.setup_head()
         self.setup_lower_frame()
         self.setup_head_frame()
@@ -211,8 +212,10 @@ class CompareMode:
         x = np.arange(len(labels))
         width = 0.35
 
-        rects1 = ax.bar(x - width/2, first_values, width, label='First GPU')
-        rects2 = ax.bar(x + width/2, second_values, width, label='Second GPU')
+        rects1 = ax.bar(x - width/2, first_values, width,
+                        label=f'First GPU : {first_gpu_details["productName"].values[0]}')
+        rects2 = ax.bar(x + width/2, second_values, width,
+                        label=f'Second GPU : {second_gpu_details["productName"].values[0]}')
 
         ax.set_ylabel('Values')
         ax.set_title('Comparison of GPUs')
