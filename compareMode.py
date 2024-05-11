@@ -131,17 +131,6 @@ class CompareMode:
         second_selected_manufacturer = self.second_manufacture_combobox.get()
         second_selected_gpu = self.second_gpu_combobox.get()
 
-        # Define colors for the bar plot
-        colors = {'NVIDIA': 'b',
-                  'AMD': 'g',
-                  'Intel': 'y',
-                  '3dfx': 'r',
-                  'ATI': 'c',
-                  'Matrox': 'm',
-                  'Sony': 'k',
-                  'XGI': 'orange'
-                  }
-
         # Filter DataFrame based on selected manufacturer and GPU
         first_gpu_details = self.df[(self.df['manufacturer'] == first_selected_manufacturer) & (
             self.df['productName'] == first_selected_gpu)]
